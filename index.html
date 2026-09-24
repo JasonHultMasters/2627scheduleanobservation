@@ -209,14 +209,14 @@ dialog::backdrop{background:rgba(46,26,79,.55)}
   </div>
   <div class="ldiv">or choose a department</div>
   <div class="dlist" id="dlist"></div>
-  <p class="lfoot">Whichever you pick is remembered on this device, so you will not see this page again.
-     Chairs can bookmark a direct link to their own department from the picker at the top of the app.<br>
+  <p class="lfoot">To skip this page, open the department picker at the top of the app and copy a direct link
+     to your own department, then bookmark it or add it to your home screen.<br>
      <span class="stamp">Schedule data from Blackbaud, 24 September 2026.</span></p>
 </div></div>
 
 <div class="wrap">
 <header>
-  <div class="hrow"><h1>Department schedules</h1><div class="clock" id="clock"></div></div>
+  <div class="hrow"><button class="home" id="home" aria-label="Back to the start">&#8249;</button><h1>Department schedules</h1><div class="clock" id="clock"></div></div>
   <div class="srch">
     <input id="q" type="search" autocomplete="off" placeholder="Find a teacher" aria-label="Find a teacher">
     <span class="mag" id="mag">&#9906;</span>
@@ -299,7 +299,7 @@ const URLDEPT=deptFromUrl();
 
 let state={
   mode:LS.get('mode','day'),
-  dept:URLDEPT||LS.get('dept',''),
+  dept:URLDEPT||DEPTS[0],
   day:LS.get('day',0)||null,
   date:LS.get('date','')||null,
   who:LS.get('who',[]),
@@ -307,16 +307,14 @@ let state={
   focus:'',
   open:null
 };
-const FIRSTRUN=!DEPTS.includes(state.dept);
-if(FIRSTRUN) state.dept=DEPTS[0];
-if(URLDEPT) LS.set('dept',URLDEPT);
-state.land=FIRSTRUN&&!URLDEPT;
+if(!DEPTS.includes(state.dept)) state.dept=DEPTS[0];
+state.land=!URLDEPT;
 if(!state.date||!CAL[state.date]) state.date=nextSchoolDate();
 if(!state.day) state.day=CAL[state.date];
 const ALLT=[...new Set(M.map(m=>m.teacher))].sort();
 const inDept=()=>[...new Set(M.filter(m=>m.dept===state.dept).map(m=>m.teacher))].sort();
 if(!Array.isArray(state.who)) state.who=[];
-state.who=state.who.filter(t=>inDept().includes(t));
+state.who=[];
 const showing=()=>state.who.length?state.who:inDept();
 
 const activeDay =()=> state.mode==='date' ? CAL[state.date] : state.day;
@@ -550,7 +548,7 @@ copyLink.onclick=()=>{
 };
 deptRows.addEventListener('click',e=>{
   const r=e.target.closest('[data-d]');if(!r)return;
-  state.dept=r.dataset.d;LS.set('dept',state.dept);
+  state.dept=r.dataset.d;
   state.who=[];LS.set('who',[]);state.open=null;
   dlgDept.close();draw();
 });
@@ -611,13 +609,13 @@ lhits.addEventListener('click',e=>{
   const b=e.target.closest('[data-t]');if(!b)return;
   const t=b.dataset.t;
   const d=[...new Set(M.filter(m=>m.teacher===t).map(m=>m.dept))].sort()[0];
-  if(d){state.dept=d;LS.set('dept',d);state.who=[];LS.set('who',[])}
+  if(d){state.dept=d;state.who=[];LS.set('who',[])}
   state.focus=t; state.open=null; lq.value=''; lhits.hidden=true;
   leaveLanding(); draw();
 });
 dlist.addEventListener('click',e=>{
   const b=e.target.closest('[data-ld]');if(!b)return;
-  state.dept=b.dataset.ld; LS.set('dept',state.dept);
+  state.dept=b.dataset.ld;
   state.who=[];LS.set('who',[]);state.open=null;state.focus='';
   leaveLanding(); draw();
 });
@@ -633,6 +631,8 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('.srch')) hits.hidden=true;
 });
 fclose.onclick=()=>{state.focus='';state.open=null;draw()};
+home.onclick=()=>{state.land=true;state.focus='';state.open=null;q.value='';hits.hidden=true;
+  lq.value='';lhits.hidden=true;window.scrollTo(0,0);draw()};
 
 /* ---------- calendar ---------- */
 function evt(u){
