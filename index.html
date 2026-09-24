@@ -13,7 +13,7 @@
   --ink:#2B2039; --ink-2:#5C5170; --ink-3:#786D8B;
   --paper:#fff; --wash:#F5F1F9; --line:#E0D7EC; --line-2:#EFE9F6;
   --gold:#C9A227; --gold-deep:#8A6D12; --gold-soft:#F3E8C4;
-  --gutter:62px}
+  --gutter:70px}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
 body{font-family:Archivo,system-ui,sans-serif;color:var(--ink);background:var(--wash);
@@ -70,9 +70,9 @@ main{padding:0 0 40px}
 .items{padding:6px 0}
 .item{width:100%;text-align:left;display:block;padding:9px 16px 10px}
 .item:focus-visible{outline:2px solid var(--plum);outline-offset:-3px}
-.who{font-size:16.5px;font-weight:600;letter-spacing:-.01em;color:var(--plum-deep)}
-.what{font-size:14.5px;color:var(--ink-2);margin-top:2px}
-.where{font-size:13.5px;color:var(--ink-3);margin-top:3px}
+.who{display:block;font-size:16.5px;font-weight:600;letter-spacing:-.01em;color:var(--plum-deep);line-height:1.25}
+.what{display:block;font-size:14.5px;color:var(--ink-2);margin-top:3px;line-height:1.3}
+.where{display:block;font-size:13.5px;color:var(--ink-3);margin-top:3px;line-height:1.3}
 .tag{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 6px;border-radius:5px;
   background:var(--gold-soft);color:var(--gold-deep);margin-left:6px;vertical-align:1px}
 .nowline{display:grid;grid-template-columns:var(--gutter) 1fr;align-items:center;
@@ -135,6 +135,36 @@ dialog::backdrop{background:rgba(46,26,79,.55)}
   padding:10px 16px;background:rgba(0,0,0,.16);border-top:1px solid rgba(255,255,255,.12);
   font-size:13.5px;font-weight:600;color:#EDE4F7}
 .people span{float:right;color:var(--gold-soft);font-weight:500}
+#landing{position:fixed;inset:0;z-index:100;background:var(--plum);color:#fff;
+  overflow-y:auto;-webkit-overflow-scrolling:touch}
+.land{max-width:540px;margin:0 auto;padding:46px 20px calc(40px + env(safe-area-inset-bottom));
+  padding-top:calc(46px + env(safe-area-inset-top))}
+.land h1{font-size:34px;line-height:1.05;font-weight:700;letter-spacing:-.03em;margin:0}
+.land h1 em{display:block;font-style:normal;color:var(--gold)}
+.land .rule{height:3px;width:56px;background:var(--gold);border-radius:2px;margin:18px 0 16px}
+.land p{margin:0;font-size:15.5px;line-height:1.55;color:#D8C9EE;max-width:44ch}
+.land .lsearch{position:relative;margin:26px 0 0}
+.land .lsearch input{width:100%;height:50px;border:0;border-radius:12px;padding:0 14px;
+  background:#fff;color:var(--ink);font:inherit;font-size:16px;font-weight:500}
+.land .lsearch input::placeholder{color:var(--ink-3);font-weight:400}
+.land .lsearch input:focus{outline:3px solid var(--gold);outline-offset:0}
+.lhits{position:absolute;left:0;right:0;top:56px;z-index:10;background:var(--paper);
+  border-radius:12px;overflow:hidden;box-shadow:0 18px 40px rgba(20,10,40,.5);max-height:44vh;overflow-y:auto}
+.ldiv{display:flex;align-items:center;gap:12px;margin:26px 0 12px;
+  font-size:12.5px;font-weight:700;color:#B9A6D8}
+.ldiv::before,.ldiv::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.18)}
+.dlist{display:flex;flex-direction:column;gap:7px}
+.dpick{display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  padding:14px 15px;border-radius:12px;background:rgba(255,255,255,.1);color:#fff;
+  font-size:15.5px;font-weight:600;line-height:1.25}
+.dpick:hover,.dpick:focus-visible{background:rgba(255,255,255,.2);outline:none}
+.dpick b{flex:1;font-weight:600}
+.dpick i{font-style:normal;font-size:19px;font-weight:600;color:var(--gold);
+  line-height:1;flex:0 0 auto;opacity:.85}
+.stamp{display:inline-block;margin-top:9px;color:#8E79B5}
+.foot{padding:18px 16px calc(24px + env(safe-area-inset-bottom));text-align:center;
+  font-size:12px;color:var(--ink-3);border-top:1px solid var(--line-2)}
+.lfoot{margin:30px 0 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.15);font-size:13px;line-height:1.55;color:#B9A6D8}
 .srch{position:relative;margin:11px 0 0}
 .srch input{width:100%;height:36px;border:0;border-radius:9px;padding:0 34px 0 12px;
   background:rgba(255,255,255,.14);color:#fff;font:inherit;font-size:14.5px;font-weight:500}
@@ -168,6 +198,22 @@ dialog::backdrop{background:rgba(46,26,79,.55)}
 .dot{width:9px;height:9px;border-radius:50%;background:var(--line);flex:0 0 auto}
 .drow[aria-pressed=true] .dot{background:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
 </style></head><body>
+<div id="landing" hidden><div class="land">
+  <h1>Upper School<em>class schedules</em></h1>
+  <div class="rule"></div>
+  <p>Every upper school class, by the day it meets. Find a department or a teacher, set when to
+     arrive and how long to stay, then send the visit to your calendar.</p>
+  <div class="lsearch">
+    <input id="lq" type="search" autocomplete="off" placeholder="Search for a teacher" aria-label="Search for a teacher">
+    <div class="lhits" id="lhits" hidden></div>
+  </div>
+  <div class="ldiv">or choose a department</div>
+  <div class="dlist" id="dlist"></div>
+  <p class="lfoot">Whichever you pick is remembered on this device, so you will not see this page again.
+     Chairs can bookmark a direct link to their own department from the picker at the top of the app.<br>
+     <span class="stamp">Schedule data from Blackbaud, 24 September 2026.</span></p>
+</div></div>
+
 <div class="wrap">
 <header>
   <div class="hrow"><h1>Department schedules</h1><div class="clock" id="clock"></div></div>
@@ -188,6 +234,7 @@ dialog::backdrop{background:rgba(46,26,79,.55)}
   </div>
 </header>
 <main id="rail"></main>
+<div class="foot">Schedule data from Blackbaud, 24 September 2026</div>
 </div>
 
 <dialog id="dlgDept"><div class="dlg">
@@ -263,6 +310,7 @@ let state={
 const FIRSTRUN=!DEPTS.includes(state.dept);
 if(FIRSTRUN) state.dept=DEPTS[0];
 if(URLDEPT) LS.set('dept',URLDEPT);
+state.land=FIRSTRUN&&!URLDEPT;
 if(!state.date||!CAL[state.date]) state.date=nextSchoolDate();
 if(!state.day) state.day=CAL[state.date];
 const ALLT=[...new Set(M.map(m=>m.teacher))].sort();
@@ -354,23 +402,34 @@ const UM=u=>M[+u.split('@')[0]];
 const UD=u=>u.split('@')[1]||null;
 
 /* ---------- teacher search ---------- */
-function drawHits(){
-  const v=q.value.trim().toLowerCase();
-  if(v.length<2){hits.hidden=true;hits.innerHTML='';return}
+function matchT(v){
+  v=v.trim().toLowerCase();
+  if(v.length<2) return null;
   const parts=v.split(/\s+/);
-  const hit=ALLT.filter(t=>{
+  return ALLT.filter(t=>{
     const l=t.toLowerCase(), last=l.split(' ').slice(-1)[0];
     return parts.every(p=>l.startsWith(p)||last.startsWith(p)||l.includes(' '+p));
   }).slice(0,8);
-  hits.hidden=false;
-  hits.innerHTML = hit.length
-    ? hit.map(t=>{
+}
+function hitHtml(list){
+  return list.length
+    ? list.map(t=>{
         const ds=[...new Set(M.filter(m=>m.teacher===t).map(m=>m.dept))].sort();
         const n=new Set(M.filter(m=>m.teacher===t).map(m=>m.course+' '+m.sect)).size;
         return '<button class="hit" data-t="'+t.replace(/"/g,'&quot;')+'"><b>'+t+'</b>'+
           '<span>'+ds.join(' &middot; ')+' &middot; '+n+' section'+(n===1?'':'s')+'</span></button>';
       }).join('')
     : '<div class="hit none">No teacher matches that.</div>';
+}
+function drawHits(){
+  const list=matchT(q.value);
+  if(!list){hits.hidden=true;hits.innerHTML='';return}
+  hits.hidden=false; hits.innerHTML=hitHtml(list);
+}
+function drawLHits(){
+  const list=matchT(lq.value);
+  if(!list){lhits.hidden=true;lhits.innerHTML='';return}
+  lhits.hidden=false; lhits.innerHTML=hitHtml(list);
 }
 function upcoming(t,limit){
   const out=[]; const td=today();
@@ -387,6 +446,8 @@ function upcoming(t,limit){
 }
 function drawFocus(){
   fname.textContent=state.focus;
+  const myd=[...new Set(M.filter(m=>m.teacher===state.focus).map(m=>m.dept))];
+  const showDept=myd.length>1;
   const days=upcoming(state.focus,12);
   if(!days.length){
     rail.innerHTML='<div class="empty"><b>Nothing ahead</b>No remaining classes on the calendar for '+state.focus+'.</div>';
@@ -402,14 +463,29 @@ function drawFocus(){
         '<button class="item" data-u="'+u+'" aria-expanded="'+(state.open===u)+'"'+(past?' style="opacity:.45"':'')+'>'+
         '<span class="who">'+m.course+(m.sect?' &middot; section '+m.sect:'')+
           (m.block&&m.block!=='-'?'<span class="tag">'+m.block+'</span>':'')+'</span>'+
-        '<span class="where">'+m.bldg+(m.room?' '+m.room:'')+' &middot; '+m.dept+'</span></button>'+
+        '<span class="where">'+m.bldg+(m.room?' '+m.room:'')+(showDept?' &middot; '+m.dept:'')+'</span></button>'+
         (state.open===u?panelHtml(m,d,u):'')+'</div></div>';
     }
   }
   rail.innerHTML=html;
 }
 
+function drawLanding(){
+  const today_=CAL[today()], d0=today_||CAL[nextSchoolDate()];
+  dlist.innerHTML=DEPTS.map(d=>{
+    const n=M.filter(m=>m.dept===d&&m.day===d0).length;
+    return '<button class="dpick" data-ld="'+d.replace(/"/g,'&quot;')+'">'+
+      '<b>'+d+'</b><i>&#8250;</i></button>';
+  }).join('');
+}
+function leaveLanding(){
+  state.land=false; landing.hidden=true;
+  document.body.style.overflow='';
+}
 function draw(){
+  landing.hidden=!state.land;
+  if(state.land){drawLanding();document.body.style.overflow='hidden';return}
+  document.body.style.overflow='';
   deptWrap.hidden=!!state.focus; fbarWrap.hidden=!state.focus;
   if(state.focus){drawFocus();return}
   drawDept();drawModes();drawPicker();drawSub();drawPeople();
@@ -529,6 +605,22 @@ rail.addEventListener('click',e=>{
   const u=it.dataset.u;state.open=(state.open===u?null:u);draw();
 });
 
+lq.addEventListener('input',drawLHits);
+lq.addEventListener('focus',drawLHits);
+lhits.addEventListener('click',e=>{
+  const b=e.target.closest('[data-t]');if(!b)return;
+  const t=b.dataset.t;
+  const d=[...new Set(M.filter(m=>m.teacher===t).map(m=>m.dept))].sort()[0];
+  if(d){state.dept=d;LS.set('dept',d);state.who=[];LS.set('who',[])}
+  state.focus=t; state.open=null; lq.value=''; lhits.hidden=true;
+  leaveLanding(); draw();
+});
+dlist.addEventListener('click',e=>{
+  const b=e.target.closest('[data-ld]');if(!b)return;
+  state.dept=b.dataset.ld; LS.set('dept',state.dept);
+  state.who=[];LS.set('who',[]);state.open=null;state.focus='';
+  leaveLanding(); draw();
+});
 q.addEventListener('input',drawHits);
 q.addEventListener('focus',drawHits);
 hits.addEventListener('click',e=>{
@@ -593,9 +685,5 @@ function buildIcs(u){
 }
 
 tick();setInterval(tick,20000);setInterval(draw,120000);draw();
-if(FIRSTRUN&&!URLDEPT){
-  deptTitle.textContent='Which department?';
-  drawDeptRows();
-  try{dlgDept.showModal()}catch(e){}
-}
+
 </script></body></html>
